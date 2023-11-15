@@ -18,11 +18,11 @@ int get_flags(const char *format, int *i)
 		{
 			if (format[current_index] == FLAGS_CH[flag_index])
 			{
-				flags != FLAGS_ARR[flag_index];
+				flags |= FLAGS_ARR[flag_index];
 				break;
 			}
 		}
-		if (FLAGS_CH[flags_index] == '\0')
+		if (FLAGS_CH[flag_index] == '\0')
 		{
 			break;
 		}

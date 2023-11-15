@@ -13,7 +13,7 @@ int printer_pointer(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
 	char extra_c = 0, padd = ' ';
-	int ind = BUFF_SIZE - 2, length = 2;
+	int ind = BUFF_SIZE - 2, length = 2, padd_start = 1;
 	unsigned long num_addrs;
 	char map_to[] = "0123456789abcdef";
 	void *addrs = va_arg(types, void *);
@@ -44,7 +44,7 @@ int printer_pointer(va_list types, char buffer[],
 		extra_c = ' ', length++;
 
 	ind++;
-	return (write_pointer(buffer, ind, length, flags, padd, extra_c));
+	return (write_pointer(buffer, ind, length,  width, flags, padd, extra_c, padd_start));
 }
 
 /**
@@ -102,24 +102,28 @@ int print_reverse(va_list types, char buffer[],
 	int i, count = 0;
 
 	(void)flags;
+	(void)buffer;
 	(void)width;
 	(void)size;
 
 	str = va_arg(types, char *);
 
 	if (str == NULL)
+	{
+		UNUSED(precision);
+
 		str = ")Null(";
+	}
 	for (i = 0; str[i]; i++)
 		;
 
 	for (i = i - 1; i >= 0; i--)
 	{
-		buffer[count++] = str[i];
+		char z = str[i];
+		write(1, &z, 1);
+		count++;
 	}
-
-	buffer[count] = '\0';
-
-	return (write(1, buffer, count));
+	return (count);
 }
 /**
 * print_rot13string - Print a string in rot13.
@@ -137,7 +141,6 @@ int print_rot13string(va_list types, char buffer[],
 	char x;
 	char *str;
 	unsigned int i, j;
-	int count = 0;
 	int count = 0;
 	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
