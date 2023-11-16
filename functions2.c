@@ -9,7 +9,7 @@
 * @size: size specifier
 * Return: NUmber of chars printed
 */
-int printer_pointer(va_list types, char buffer[],
+int print_pointer(va_list types, char buffer[],
 		int flags, int width, int precision, int size)
 {
 	char extra_c = 0, padd = ' ';
